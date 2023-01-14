@@ -8,6 +8,7 @@ use birdrust::{logic::update_report, types::ParsedReport};
 use futures::{stream::StreamExt, SinkExt};
 use std::{sync::Arc, time::Duration};
 use tokio::{sync::broadcast, task, time};
+use tower_http::cors::{Any, CorsLayer};
 
 #[derive(Clone)]
 struct SharedState {
@@ -21,6 +22,8 @@ async fn main() {
 
     let shared_state = Arc::new(SharedState { tx });
 
+    let cors = CorsLayer::new().allow_origin(Any);
+
     let app = Router::new()
         .route("/", get(|| async { "Subscribe to websocket at /reports" }))
         .route(
@@ -29,7 +32,8 @@ async fn main() {
                 let shared_state = Arc::clone(&shared_state);
                 move |test| websocket_handler(test, shared_state)
             }),
-        );
+        )
+        .layer(cors);
 
     task::spawn(async move {
         let mut interval = time::interval(Duration::from_secs(2));
@@ -46,7 +50,7 @@ async fn main() {
         }
     });
 
-    axum::Server::bind(&"0.0.0.0:3000".parse().unwrap())
+    axum::Server::bind(&"0.0.0.0:8080".parse().unwrap())
         .serve(app.into_make_service())
         .await
         .unwrap();
