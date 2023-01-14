@@ -1,4 +1,4 @@
-//! # Birdnest Server
+//! # Birdrust - birdnest server
 //! Fetches and stores 10 minutes of drone data, pilots and recent violations from the Birdnest API
 //! Serves it to all websocket clients
 

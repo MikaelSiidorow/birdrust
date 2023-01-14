@@ -4,7 +4,7 @@ use axum::{
     routing::get,
     Router,
 };
-use birdnest_server::{logic::update_report, types::ParsedReport};
+use birdrust::{logic::update_report, types::ParsedReport};
 use futures::{stream::StreamExt, SinkExt};
 use std::{sync::Arc, time::Duration};
 use tokio::{sync::broadcast, task, time};

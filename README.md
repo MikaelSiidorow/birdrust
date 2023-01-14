@@ -1,4 +1,4 @@
-# Birdnest Server
+# Birdrust - birdnest server
 
 A Rust websocket server build for Reaktor's [Summer Assignment](https://assignments.reaktor.com/birdnest)!
 
