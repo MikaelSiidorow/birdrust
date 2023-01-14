@@ -1,7 +1,10 @@
+//! Types for the API responses and types for the server implementation
+
+#![allow(missing_docs)]
+
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
-// types from the API
 #[derive(Serialize, Deserialize, Debug, PartialEq, Clone)]
 pub struct Report {
     #[serde(rename = "deviceInformation")]
@@ -61,7 +64,6 @@ pub struct Pilot {
     pub created_date: String,
 }
 
-// custom types
 #[derive(Serialize, Deserialize, Debug, PartialEq, Clone)]
 pub struct Violation {
     #[serde(rename = "serialNumber")]

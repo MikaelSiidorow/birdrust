@@ -95,7 +95,7 @@ checksum = "0ea22880d78093b0cbe17c89f64a7d457941e65759157ec6cb31a31d652b05e5"
 
 [[package]]
 name = "birdnest_server"
-version = "1.0.0"
+version = "1.0.1"
 dependencies = [
  "axum",
  "chrono",

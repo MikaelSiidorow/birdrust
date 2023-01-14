@@ -1,8 +1,26 @@
+//! Logic for the server, and updating data
+
 use crate::api::{fetch_pilot, fetch_report};
 use crate::types::{Drone, ParsedReport, Pilot, Report, Violation, ViolationSummary};
 use futures::future::join_all;
 use std::collections::HashMap;
 
+/// Fetches the report from the API, and parses it into a ParsedReport
+///
+/// # Arguments
+///
+/// * `previous_parsed_report` - The previous ParsedReport, if there is one. Used as initial state for the new ParsedReport
+///
+/// # Examples
+///
+/// ```
+/// use birdnest_server::logic::update_report;
+/// async {
+///     let new_parsed_report = update_report(&None).await;
+///     // Do something with the new report
+///     // ...
+/// };
+/// ```
 pub async fn update_report(previous_parsed_report: &Option<ParsedReport>) -> ParsedReport {
     let new_report: Report = fetch_report().await;
     let new_violating_drones = &new_report
@@ -62,7 +80,48 @@ pub async fn update_report(previous_parsed_report: &Option<ParsedReport>) -> Par
     }
 }
 
-fn distance_from_origin(drone: &Drone) -> f64 {
+/// Calculate drone distance from birdnest located at (250000, 250000)
+///
+/// # Arguments
+///
+/// * `drone` - The drone to calculate the distance from origin
+///
+/// # Examples
+///
+/// ```
+/// use birdnest_server::{logic::distance_from_origin, types::Drone};
+/// let drone = Drone {
+///     serial_number: "SN-wVJnFAznMo".to_string(),
+///     model: "HRP-DRP 1 Pro".to_string(),
+///     manufacturer: "ProDröne Ltd".to_string(),
+///     mac: "4f:a7:2a:72:fe:01".to_string(),
+///     ipv4: "115.226.53.29".to_string(),
+///     ipv6: "e3b6:a70d:0d56:96eb:7924:56ca:ddc1:8d41".to_string(),
+///     firmware: "6.3.3".to_string(),
+///     position_y: 250000.0,
+///     position_x: 250000.0,
+///     altitude: 4718.8464039730825,
+/// };
+/// assert_eq!(distance_from_origin(&drone), 0.0);
+/// ```
+///
+/// ```
+/// use birdnest_server::{logic::distance_from_origin, types::Drone};
+/// let drone = Drone {
+///     serial_number: "SN-wVJnFAznMo".to_string(),
+///     model: "HRP-DRP 1 Pro".to_string(),
+///     manufacturer: "ProDröne Ltd".to_string(),
+///     mac: "4f:a7:2a:72:fe:01".to_string(),
+///     ipv4: "115.226.53.29".to_string(),
+///     ipv6: "e3b6:a70d:0d56:96eb:7924:56ca:ddc1:8d41".to_string(),
+///     firmware: "6.3.3".to_string(),
+///     position_y: 436597.82481145335,
+///     position_x: 141326.63552825956,
+///     altitude: 4718.8464039730825,
+/// };
+/// assert_eq!(distance_from_origin(&drone), 215936.67675958519);
+/// ```
+pub fn distance_from_origin(drone: &Drone) -> f64 {
     let origin_x = 250000.0;
     let origin_y = 250000.0;
     let x = drone.position_x;
