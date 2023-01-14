@@ -2,6 +2,7 @@
 
 use crate::api::{fetch_pilot, fetch_report};
 use crate::types::{Drone, ParsedReport, Pilot, Report, Violation, ViolationSummary};
+use chrono::DateTime;
 use futures::future::join_all;
 use std::collections::HashMap;
 
@@ -51,27 +52,33 @@ pub async fn update_report(previous_parsed_report: &Option<ParsedReport>) -> Par
         HashMap::new()
     };
 
-    let recent_violations =
-        new_violations
-            .iter()
-            .fold(previous_violations, |mut violations, violation| {
-                let summary = violations
-                    .entry(violation.serial_number.to_string())
-                    .or_insert(ViolationSummary {
-                        pilot: violation.pilot.clone(),
-                        times_seen: 0,
-                        closest_distance: -1.0,
-                        latest_date: "".to_string(),
-                    });
-                summary.times_seen += 1;
-                summary.closest_distance = if summary.closest_distance == -1.0 {
-                    violation.distance_from_origin
-                } else {
-                    summary.closest_distance.min(violation.distance_from_origin)
-                };
-                summary.latest_date = violation.violated_date.clone();
-                violations
-            });
+    let recent_violations = new_violations
+        .iter()
+        .fold(previous_violations, |mut violations, violation| {
+            let summary = violations
+                .entry(violation.serial_number.to_string())
+                .or_insert(ViolationSummary {
+                    pilot: violation.pilot.clone(),
+                    times_seen: 0,
+                    closest_distance: -1.0,
+                    latest_date: "".to_string(),
+                });
+            summary.times_seen += 1;
+            summary.closest_distance = if summary.closest_distance == -1.0 {
+                violation.distance_from_origin
+            } else {
+                summary.closest_distance.min(violation.distance_from_origin)
+            };
+            summary.latest_date = violation.violated_date.clone();
+            violations
+        })
+        .into_iter()
+        .filter(|(_, summary)| {
+            let now = DateTime::parse_from_rfc3339(&new_report.capture.snapshot_timestamp).unwrap();
+            let then = DateTime::parse_from_rfc3339(&summary.latest_date).unwrap();
+            now.signed_duration_since(then).num_minutes() < 10
+        })
+        .collect::<HashMap<String, ViolationSummary>>();
 
     ParsedReport {
         device_information: new_report.device_information,
