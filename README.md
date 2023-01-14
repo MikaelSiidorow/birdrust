@@ -12,7 +12,7 @@ Live service deployed to [https://birdrust.fly.dev/](https://birdrust.fly.dev/)!
 ## Build & run
 
 1. `docker build -t birdrust .`
-2. `cargo run birdrust`
+2. `docker run birdrust`
 3. Connect to `ws://localhost:8080/reports` from client
 
 ## Documentation
