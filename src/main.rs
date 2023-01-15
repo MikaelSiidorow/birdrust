@@ -13,12 +13,12 @@ use tower_http::cors::{Any, CorsLayer};
 #[derive(Clone)]
 struct SharedState {
     // Channel for sending data to clients
-    tx: broadcast::Sender<ParsedReport>,
+    tx: broadcast::Sender<String>,
 }
 
 #[tokio::main]
 async fn main() {
-    let (tx, _) = broadcast::channel::<ParsedReport>(16);
+    let (tx, _) = broadcast::channel::<String>(16);
 
     let shared_state = Arc::new(SharedState { tx });
 
@@ -43,7 +43,8 @@ async fn main() {
             let shared_state = Arc::clone(&shared_state);
             let new_report = update_report(&previous_report).await;
             previous_report = Some(new_report.clone());
-            match shared_state.tx.send(new_report) {
+            let report_text = serde_json::to_string(&new_report).unwrap();
+            match shared_state.tx.send(report_text) {
                 Ok(number) => println!("Sent data to {} clients", number),
                 Err(_) => println!("No clients connected"),
             };
@@ -69,11 +70,7 @@ async fn websocket(stream: WebSocket, state: Arc<SharedState>) {
     // spawn task for sending msgs from the channel to the client
     let mut send_task = tokio::spawn(async move {
         while let Ok(msg) = rx.recv().await {
-            if sender
-                .send(Message::Text(serde_json::to_string(&msg).unwrap()))
-                .await
-                .is_err()
-            {
+            if sender.send(Message::Text(msg)).await.is_err() {
                 break;
             }
         }
