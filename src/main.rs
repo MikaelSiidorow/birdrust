@@ -66,6 +66,13 @@ async fn websocket(stream: WebSocket, state: Arc<SharedState>) {
     // subscribe to the channel
     let mut rx = state.tx.subscribe();
 
+    // send the initial report
+    if let Ok(msg) = rx.recv().await {
+        if sender.send(Message::Text(msg)).await.is_err() {
+            return;
+        }
+    }
+
     // spawn task for sending msgs from the channel to the client
     let mut send_task = tokio::spawn(async move {
         while let Ok(msg) = rx.recv().await {
