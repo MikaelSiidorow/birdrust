@@ -1,8 +1,12 @@
-# Birdrust - birdnest server
+# Birdrust
+
+Live app deployed at [https://birdrust.siidorow.com/](https://birdrust.siidorow.com/)!
+
+### Server
 
 A Rust websocket server build for Reaktor's [Summer Assignment](https://assignments.reaktor.com/birdnest)!
 
-Live service deployed to [https://birdrust.fly.dev/](https://birdrust.fly.dev/)!
+Server deployed at [https://birdrust.fly.dev/](https://birdrust.fly.dev/)!
 
 View client documentation [here](/client/README.md)!
 
