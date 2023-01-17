@@ -7,7 +7,7 @@
 	{#each Object.entries($report.recentViolations).sort(([, a], [, b]) => Date.parse(b.latestDate) - Date.parse(a.latestDate)) as [serialNumber, violation] (serialNumber)}
 		{@const { pilot, latestDate, closestDistance, timesSeen } = violation}
 		<li class="my-4 first:mt-2 last:mb-2 px-4 flex justify-between relative">
-			<div aria-hidden class="h-full w-1 bg-purple-500 absolute left-0 top-0" />
+			<div aria-hidden="true" class="h-full w-1 bg-purple-500 absolute left-0 top-0" />
 			<div class="inline-flex flex-col">
 				<span class="text-slate-800 text-lg">
 					{#if !pilot}
