@@ -34,7 +34,7 @@ export interface ViolationSummary {
 	pilot: Option<Pilot>;
 	timesSeen: number;
 	closestDistance: number;
-	latestDt: string;
+	latestDate: string;
 }
 
 export interface Pilot {
@@ -43,7 +43,7 @@ export interface Pilot {
 	lastName: string;
 	phoneNumber: string;
 	email: string;
-	createdDt: string;
+	createdDate: string;
 }
 
 export type Option<T> = T | undefined;
