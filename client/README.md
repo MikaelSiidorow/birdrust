@@ -6,7 +6,7 @@ Live version deployed at [https://birdrust.siidorow.com](https://birdrust.siidor
 
 ## Developing
 
-Once you've created a project and installed dependencies with `pnpm install`, start a development server:
+Once you've created a project and installed dependencies with `pnpm install` and copied the `.env.example` to `.env`, start a development server:
 
 ```bash
 pnpm run dev
