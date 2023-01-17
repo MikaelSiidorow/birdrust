@@ -4,6 +4,8 @@ A Rust websocket server build for Reaktor's [Summer Assignment](https://assignme
 
 Live service deployed to [https://birdrust.fly.dev/](https://birdrust.fly.dev/)!
 
+View client documentation [here](/client/README.md)!
+
 ## Development
 
 1. `cargo update`
