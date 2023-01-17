@@ -16,7 +16,12 @@
 </header>
 <main class="m-2 flex flex-col md:gap-4 xl:gap-8 md:flex-row justify-center">
 	{#if !$report}
-		<p>Report not found</p>
+		<div class="flex gap-2 items-center text-lg">
+			<svg class="animate-spin text-purple-700" style="width:24px;height:24px" viewBox="0 0 24 24">
+				<path fill="currentColor" d="M12,4V2A10,10 0 0,0 2,12H4A8,8 0 0,1 12,4Z" />
+			</svg>
+			Fetching newest report...
+		</div>
 	{:else}
 		<section class="w-screen max-w-lg ">
 			<h2 class="text-xl text-slate-900">Live map</h2>
