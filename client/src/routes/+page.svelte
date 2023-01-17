@@ -14,7 +14,7 @@
 		{$report?.deviceInformation.deviceId ?? 'Drone Tracker'}
 	</h1>
 </header>
-<main class="m-2 flex flex-col md:flex-row justify-center">
+<main class="m-2 flex flex-col md:gap-4 xl:gap-8 md:flex-row justify-center">
 	{#if !$report}
 		<p>Report not found</p>
 	{:else}
