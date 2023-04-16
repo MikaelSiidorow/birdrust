@@ -14,6 +14,7 @@ pub struct Report {
 #[derive(Serialize, Deserialize, Debug, PartialEq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct Capture {
+    #[serde(rename = "@snapshotTimestamp")]
     pub snapshot_timestamp: String,
     #[serde(rename(deserialize = "drone"))]
     pub drones: Vec<Drone>,
@@ -36,6 +37,7 @@ pub struct Drone {
 #[derive(Serialize, Deserialize, Debug, PartialEq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct DeviceInformation {
+    #[serde(rename = "@deviceId")]
     pub device_id: String,
     pub listen_range: i32,
     pub device_started: String,
